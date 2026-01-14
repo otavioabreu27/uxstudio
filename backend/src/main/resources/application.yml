@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: contacts
+
+data:
+    mongodb:
+      host: ${MONGO_HOST:localhost}
+      port: ${MONGO_PORT:27017}
+      database: ${MONGO_DB:contacts_db}
+      auto-index-creation: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info,metrics"
+  endpoint:
+    health:
+      show-details: always
