@@ -8,7 +8,7 @@ Backend Developer technical challenge for UX Studio.
 ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
 
 [![Backend CI](https://github.com/otavioabreu27/uxstudio/actions/workflows/backend-ci.yml/badge.svg)](https://github.com/otavioabreu27/uxstudio/actions/workflows/backend-ci.yml)
-[![Frontend CI](https://github.com/SEU_USUARIO/SEU_REPOSITORIO/actions/workflows/frontend-ci.yml/badge.svg)](https://github.com/SEU_USUARIO/SEU_REPOSITORIO/actions/workflows/frontend-ci.yml)
+[![Frontend CI](https://github.com/otavioabreu27/uxstudio/actions/workflows/frontend-ci.yml/badge.svg)](https://github.com/SEU_USUARIO/SEU_REPOSITORIO/actions/workflows/frontend-ci.yml)
 ![Digital Ocean](https://img.shields.io/badge/Digital_Ocean-%230080FF.svg?style=flat-square&logo=digitalocean&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-Ready-blue?style=flat-square&logo=docker)
 
