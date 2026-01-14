@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 import jakarta.validation.Valid
 
-// Creating a mock controller
 @RestController
 class ExceptionTestController {
     @PostMapping("/test-domain-error")
@@ -29,9 +28,7 @@ class ExceptionTestController {
     }
 
     @PostMapping("/test-validation-error")
-    fun triggerValidationError(@Valid @RequestBody request: ContactRequest) {
-        // Only to trigger valid
-    }
+    fun triggerValidationError(@Valid @RequestBody request: ContactRequest) {}
 }
 
 @WebMvcTest(ExceptionTestController::class)
@@ -45,53 +42,55 @@ class GlobalExceptionHandlerTest {
     @Autowired
     private lateinit var objectMapper: ObjectMapper
 
+    companion object {
+        private const val PATH_TITLE = "$.title"
+        private const val PATH_DETAIL = "$.detail"
+        private const val PATH_USER_MESSAGE = "$.userMessage"
+        private const val PATH_STATUS_CODE = "$.statusCode"
+    }
+
     @Test
-    fun `should handle IllegalArgumentException and return ProblemDetail`() {
-        // Act & Assert
+    fun shouldHandleIllegalArgumentExceptionAndReturnProblemDetail() {
         mockMvc.post("/test-domain-error")
             .andExpect {
                 status { isBadRequest() }
-                jsonPath("$.title") { value("Business Rule Violation") }
-                jsonPath("$.detail") { value("Invalid business rule") }
-                jsonPath("$.userMessage") { value("Invalid business rule") }
-                jsonPath("$.statusCode") { value(400) }
+                jsonPath(PATH_TITLE) { value("Business Rule Violation") }
+                jsonPath(PATH_DETAIL) { value("Invalid business rule") }
+                jsonPath(PATH_USER_MESSAGE) { value("Invalid business rule") }
+                jsonPath(PATH_STATUS_CODE) { value(400) }
                 jsonPath("$.type") { value("https://api.uxstudio.com/errors/business-rule") }
             }
     }
 
     @Test
-    fun `should handle MethodArgumentNotValidException and return field errors`() {
-        // Arrange
+    fun shouldHandleMethodArgumentNotValidExceptionAndReturnFieldErrors() {
         val invalidRequest = ContactRequest(
             name = "",
             phoneNumber = "+36",
             email = "invalid-email"
         )
 
-        // Act & Assert
         mockMvc.post("/test-validation-error") {
             contentType = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsString(invalidRequest)
         }.andExpect {
             status { isBadRequest() }
-            jsonPath("$.title") { value("Constraint Violation") }
-            jsonPath("$.detail") { value("Structural validation failed") }
-            // Verificamos se a lista de erros detalhados está presente
+            jsonPath(PATH_TITLE) { value("Constraint Violation") }
+            jsonPath(PATH_DETAIL) { value("Structural validation failed") }
             jsonPath("$.errors") { isArray() }
             jsonPath("$.errors[?(@.field == 'name')].userMessage") { isNotEmpty() }
-            jsonPath("$.statusCode") { value(400) }
+            jsonPath(PATH_STATUS_CODE) { value(400) }
         }
     }
 
     @Test
-    fun `should use default message when IllegalArgumentException message is null`() {
-        // Act & Assert
+    fun shouldUseDefaultMessageWhenIllegalArgumentExceptionMessageIsNull() {
         mockMvc.post("/test-domain-error-null")
             .andExpect {
                 status { isBadRequest() }
-                jsonPath("$.detail") { value("Invalid business data") }
-                jsonPath("$.userMessage") { value("The data provided is invalid.") } // Valida o fallback do elvis operator
-                jsonPath("$.title") { value("Business Rule Violation") }
+                jsonPath(PATH_DETAIL) { value("Invalid business data") }
+                jsonPath(PATH_USER_MESSAGE) { value("The data provided is invalid.") }
+                jsonPath(PATH_TITLE) { value("Business Rule Violation") }
             }
     }
 }

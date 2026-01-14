@@ -1,7 +1,7 @@
 plugins {
     kotlin("jvm") version "1.9.25"
     kotlin("plugin.spring") version "1.9.25"
-    id("org.springframework.boot") version "3.4.1" // Versão estável recomendada
+    id("org.springframework.boot") version "3.4.1"
     id("io.spring.dependency-management") version "1.1.7"
     id("org.asciidoctor.jvm.convert") version "4.0.5"
     jacoco
@@ -24,9 +24,14 @@ repositories {
 extra["snippetsDir"] = file("build/generated-snippets")
 extra["springBootAdminVersion"] = "3.4.1"
 extra["springCloudVersion"] = "2024.0.0"
+extra["springBootAdminVersion"] = "3.4.1"
+extra["springCloudVersion"] = "2024.0.0"
+extra["awsSdkVersion"] = "2.25.0"
+extra["mockkVersion"] = "1.13.13"
+extra["springDocVersion"] = "2.8.5"
 
 dependencies {
-    // Web & Core
+    // Web & Core (Versões geradas pelo Spring Boot Starter Parent)
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-validation")
@@ -36,20 +41,18 @@ dependencies {
 
     // Persistence & Cloud
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
-    implementation("software.amazon.awssdk:s3:2.25.0")
+    implementation("software.amazon.awssdk:s3")
     implementation("org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j")
 
     // Monitoring & UI
     implementation("de.codecentric:spring-boot-admin-starter-server")
     implementation("de.codecentric:spring-boot-admin-starter-client")
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.5")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${property("springDocVersion")}")
 
     // Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-
-    // Essencial para o Kotlin Test syntax
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
-    testImplementation("io.mockk:mockk:1.13.13")
+    testImplementation("io.mockk:mockk:${property("mockkVersion")}")
     testImplementation("org.springframework.security:spring-security-test")
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
 }
@@ -58,9 +61,9 @@ dependencyManagement {
     imports {
         mavenBom("de.codecentric:spring-boot-admin-dependencies:${property("springBootAdminVersion")}")
         mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
+        mavenBom("software.amazon.awssdk:bom:${property("awsSdkVersion")}")
     }
 }
-
 
 val coverageExclusions = listOf(
     "**/config/**",

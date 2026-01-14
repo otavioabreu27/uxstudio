@@ -23,7 +23,7 @@ class ImageServiceImplTest {
     }
 
     @Test
-    fun `should decode base64 and store image successfully`() {
+    fun shouldDecodeBase64AndStoreImageSuccessfully() {
         every { imageRepoPort.store(any(), "image/png") } returns IMAGE_ID
 
         val result = imageService.createImage(VALID_BASE64)
@@ -33,8 +33,7 @@ class ImageServiceImplTest {
     }
 
     @Test
-    fun `should decode base64 without prefix using default content type`() {
-        // Testa o fallback do método privado decodeBase64 para "image/png"
+    fun shouldDecodeBase64WithoutPrefixUsingDefaultContentType() {
         every { imageRepoPort.store(any(), "image/png") } returns IMAGE_ID
 
         val result = imageService.createImage(RAW_BASE64)
@@ -44,7 +43,7 @@ class ImageServiceImplTest {
     }
 
     @Test
-    fun `should throw exception when base64 is corrupted`() {
+    fun shouldThrowExceptionWhenBase64IsCorrupted() {
         val corruptedBase64 = "data:image/png;base64,invalid-chars-@#$%"
 
         val exception = assertThrows<IllegalArgumentException> {
@@ -56,7 +55,7 @@ class ImageServiceImplTest {
     }
 
     @Test
-    fun `should load image bytes successfully`() {
+    fun shouldLoadImageBytesSuccessfully() {
         // Arrange
         every { imageRepoPort.load(IMAGE_ID) } returns MOCK_BYTES
 
@@ -70,7 +69,7 @@ class ImageServiceImplTest {
     }
 
     @Test
-    fun `should return null when image is not found`() {
+    fun shouldReturnNullWhenImageIsNotFound() {
         every { imageRepoPort.load(IMAGE_ID) } returns null
 
         val result = imageService.getImage(IMAGE_ID)
@@ -79,7 +78,7 @@ class ImageServiceImplTest {
     }
 
     @Test
-    fun `should update image successfully`() {
+    fun shouldUpdateImageSuccessfully() {
         // Arrange
         every { imageRepoPort.update(IMAGE_ID, any()) } just runs
 
@@ -91,7 +90,7 @@ class ImageServiceImplTest {
     }
 
     @Test
-    fun `should delete image successfully`() {
+    fun shouldDeleteImageSuccessfully() {
         // Arrange
         every { imageRepoPort.delete(IMAGE_ID) } just runs
 

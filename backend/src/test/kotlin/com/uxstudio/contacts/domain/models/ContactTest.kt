@@ -15,7 +15,7 @@ class ContactTest {
     }
 
     @Test
-    fun `should throw exception when email format is invalid`() {
+    fun shouldThrowExceptionWhenEmailFormatIsInvalid() {
         // Arrange & Act
         val exception = assertThrows<IllegalArgumentException> {
             Contact(
@@ -31,7 +31,7 @@ class ContactTest {
     }
 
     @Test
-    fun `should throw exception when name is empty`() {
+    fun shouldThrowExceptionWhenNameIsEmpty() {
         // Arrange & Act
         val exception = assertThrows<IllegalArgumentException> {
             Contact(
@@ -47,7 +47,7 @@ class ContactTest {
     }
 
     @Test
-    fun `should create contact when all values are valid`() {
+    fun shouldCreateContactWhenAllValuesAreValid() {
         // Act
         val contact = Contact(
             name = VALID_NAME,
@@ -61,7 +61,7 @@ class ContactTest {
     }
 
     @Test
-    fun `should throw exception when phoneNumber is invalid`() {
+    fun shouldThrowExceptionWhenPhoneNumberIsInvalid() {
         // Act
         val exception = assertThrows<IllegalArgumentException> {
             Contact(
@@ -76,7 +76,7 @@ class ContactTest {
     }
 
     @Test
-    fun `should have getters when created successfully`() {
+    fun shouldHaveGettersWhenCreatedSuccessfully() {
         // Arrange & Act
         val contact = Contact(
             id = "6967987b725f02b73e14fd31",

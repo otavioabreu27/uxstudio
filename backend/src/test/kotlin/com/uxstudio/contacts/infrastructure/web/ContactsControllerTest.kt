@@ -62,7 +62,7 @@ class ContactsControllerTest {
     }
 
     @Test
-    fun `should create contact with image successfully`() {
+    fun shouldCreateContactWithImageSuccessfully() {
         // Arrange
         val expectedContact = Contact(
             id = "6967987b725f02b73e14fd31",
@@ -90,7 +90,7 @@ class ContactsControllerTest {
     }
 
     @Test
-    fun `should return 400 when request is invalid`() {
+    fun shouldReturn400WhenRequestIsInvalid() {
         val invalidRequest = TEST_REQUEST.copy(name = "")
 
         mockMvc.post("/contacts") {
@@ -102,7 +102,7 @@ class ContactsControllerTest {
     }
 
     @Test
-    fun `should create contact successfully when image is not provided`() {
+    fun shouldCreateContactSuccessfullyWhenImageIsNotProvided() {
         // Arrange
         val requestWithoutImage = TEST_REQUEST.copy(imageBase64 = null)
 

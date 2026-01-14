@@ -25,7 +25,7 @@ class ContactServiceImplTest {
     }
 
     @Test
-    fun `should create contact when email does not exist`() {
+    fun shouldCreateContactWhenEmailDoesNotExist() {
         // Arrange
         every { contactRepoPort.existsByEmail(TEST_EMAIL) } returns false
         every { contactRepoPort.save(TEST_CONTACT) } returns TEST_CONTACT
@@ -41,7 +41,7 @@ class ContactServiceImplTest {
     }
 
     @Test
-    fun `should throw exception when email already exists`() {
+    fun shouldThrowExceptionWhenEmailAlreadyExists() {
         // Arrange
         every { contactRepoPort.existsByEmail(TEST_EMAIL) } returns true
 

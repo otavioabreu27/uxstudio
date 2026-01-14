@@ -17,9 +17,10 @@ class ContactServiceImpl(
 ) : ContactService {
 
     override fun createContact(contact: Contact): Contact {
-        if (contactRepoPort.existsByEmail(contact.email)) {
-            throw IllegalArgumentException("A contact with email ${contact.email} already exists.")
+        require(!contactRepoPort.existsByEmail(contact.email)) {
+            "A contact with email ${contact.email} already exists."
         }
+
         return contactRepoPort.save(contact)
     }
 }

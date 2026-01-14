@@ -6,7 +6,7 @@ package com.uxstudio.contacts.infrastructure.persistence
  * back to the pure [D] domain model, maintaining a strict separation of concerns.
  * * @param D The target Domain Model type.
  */
-interface PersistenceEntity<D> {
+fun interface PersistenceEntity<D> {
     /**
      * Maps the persistence entity (Infrastructure) to a pure Domain model.
      * @return An instance of the domain model [D].
