@@ -109,7 +109,6 @@ sonar {
         property("sonar.projectName", "uxstudio")
         property("sonar.host.url", "https://sonarcloud.io")
 
-        // Sincronizamos as exclusões do Sonar com as do Jacoco
         property("sonar.exclusions", coverageExclusions.joinToString(","))
         property("sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml")
     }
@@ -117,7 +116,7 @@ sonar {
 
 tasks.withType<Test> {
     useJUnitPlatform()
-    finalizedBy(tasks.jacocoTestReport) // Gera o relatório automaticamente após os testes
+    finalizedBy(tasks.jacocoTestReport)
 }
 
 tasks.check {
