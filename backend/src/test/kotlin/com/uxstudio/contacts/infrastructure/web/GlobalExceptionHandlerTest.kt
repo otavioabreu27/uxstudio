@@ -43,7 +43,7 @@ class GlobalExceptionHandlerTest {
     private lateinit var objectMapper: ObjectMapper
 
     companion object {
-        private const val PATH_TITLE = "$.title"
+            private const val PATH_TITLE = "$.title"
         private const val PATH_DETAIL = "$.detail"
         private const val PATH_USER_MESSAGE = "$.userMessage"
         private const val PATH_STATUS_CODE = "$.statusCode"
