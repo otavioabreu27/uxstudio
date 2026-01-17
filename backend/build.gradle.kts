@@ -104,8 +104,9 @@ tasks.jacocoTestCoverageVerification {
 
 sonar {
     properties {
-        property("sonar.projectKey", "uxstudio-backend")
-        property("sonar.projectName", "UX Studio Backend")
+        property("sonar.projectKey", "otavioabreu27_uxstudio")
+        property("sonar.organization", "otavioabreu27")
+        property("sonar.projectName", "uxstudio")
         property("sonar.host.url", "https://sonarcloud.io")
 
         // Sincronizamos as exclusões do Sonar com as do Jacoco
