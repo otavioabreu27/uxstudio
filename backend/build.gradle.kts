@@ -24,20 +24,21 @@ repositories {
 extra["snippetsDir"] = file("build/generated-snippets")
 extra["springBootAdminVersion"] = "3.4.1"
 extra["springCloudVersion"] = "2024.0.0"
-extra["springBootAdminVersion"] = "3.4.1"
-extra["springCloudVersion"] = "2024.0.0"
 extra["awsSdkVersion"] = "2.25.0"
 extra["mockkVersion"] = "1.13.13"
 extra["springDocVersion"] = "2.8.5"
+extra["kotlinxCoroutinesVersion"] = "1.8.1"
 
 dependencies {
-    // Web & Core (Versões geradas pelo Spring Boot Starter Parent)
+    // Web & Core
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${property("kotlinxCoroutinesVersion")}")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:${property("kotlinxCoroutinesVersion")}")
 
     // Persistence & Cloud
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
@@ -55,6 +56,7 @@ dependencies {
     testImplementation("io.mockk:mockk:${property("mockkVersion")}")
     testImplementation("org.springframework.security:spring-security-test")
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:${property("kotlinxCoroutinesVersion")}")
 }
 
 dependencyManagement {

@@ -1,7 +1,7 @@
 package com.uxstudio.contacts.infrastructure.web
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.uxstudio.contacts.infrastructure.web.dto.ContactRequest
+import com.uxstudio.contacts.infrastructure.web.dto.ContactCreationRequest
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -28,7 +28,7 @@ class ExceptionTestController {
     }
 
     @PostMapping("/test-validation-error")
-    fun triggerValidationError(@Valid @RequestBody request: ContactRequest) {}
+    fun triggerValidationError(@Valid @RequestBody request: ContactCreationRequest) {}
 }
 
 @WebMvcTest(ExceptionTestController::class)
@@ -64,7 +64,7 @@ class GlobalExceptionHandlerTest {
 
     @Test
     fun shouldHandleMethodArgumentNotValidExceptionAndReturnFieldErrors() {
-        val invalidRequest = ContactRequest(
+        val invalidRequest = ContactCreationRequest(
             name = "",
             phoneNumber = "+36",
             email = "invalid-email"

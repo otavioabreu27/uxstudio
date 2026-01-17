@@ -11,7 +11,7 @@ import io.swagger.v3.oas.annotations.media.Schema
  * Uses Jakarta Validation for structural integrity and
  * SpringDoc for API documentation.
  */
-data class ContactRequest(
+data class ContactCreationRequest(
     @field:NotBlank(message = "Name is required")
     @field:Schema(example = "John Doe")
     val name: String,
@@ -31,7 +31,7 @@ data class ContactRequest(
 
     @field:Schema(
         description = "Base64 encoded string of the contact image",
-        example = "data:image/png;base64,iVBORw0KGgoAAAANSUhEU..."
+        example = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
     )
     val imageBase64: String? = null
 ) {

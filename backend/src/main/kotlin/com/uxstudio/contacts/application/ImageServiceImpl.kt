@@ -25,11 +25,6 @@ class ImageServiceImpl(
         return imageRepoPort.load(imageId)
     }
 
-    override fun updateImage(imageId: String, imageBase64: String) {
-        val (bytes, _) = decodeBase64(imageBase64)
-        imageRepoPort.update(imageId, bytes)
-    }
-
     override fun deleteImage(imageId: String) {
         imageRepoPort.delete(imageId)
     }
