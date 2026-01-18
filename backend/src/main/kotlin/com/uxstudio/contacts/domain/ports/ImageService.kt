@@ -22,13 +22,6 @@ interface ImageService {
     fun getImage(imageId: String): ByteArray?
 
     /**
-     * Updates an existing image with a new Base64 string.
-     * @param imageId The ID of the image to update.
-     * @param imageBase64 The new Base64 encoded image string.
-     */
-    fun updateImage(imageId: String, imageBase64: String)
-
-    /**
      * Deletes an image from the system.
      * @param imageId The ID of the image to be removed.
      */

@@ -15,12 +15,13 @@ interface MongoContactRepository : MongoRepository<ContactEntity, String> {
 
     /**
      * Checks for existence of a record by email.
-     * Spring Data derives the query automatically from the method name.
+     * Automatically derived from Spring Data.
      */
     fun existsByEmail(email: String): Boolean
 
     /**
-     * Retrieves a contact by email for unique constraint checks.
+     * Checks for existence of a record by phone number.
+     * Automatically derived from Spring Data.
      */
-    fun findByEmail(email: String): ContactEntity?
+    fun existsByPhoneNumber(phoneNumber: String): Boolean
 }
