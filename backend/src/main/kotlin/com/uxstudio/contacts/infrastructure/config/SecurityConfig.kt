@@ -13,6 +13,16 @@ class SecurityConfig {
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
+            .cors { cors ->
+                cors.configurationSource {
+                    val config = org.springframework.web.cors.CorsConfiguration()
+                    val allowedOrigin = System.getenv("ALLOWED_ORIGINS") ?: "http://localhost:3000"
+                    config.allowedOrigins = listOf(allowedOrigin)
+                    config.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                    config.allowedHeaders = listOf("*")
+                    config
+                }
+            }
             .csrf { it.disable() }
             .headers { headers ->
                 headers.frameOptions { it.disable() }
