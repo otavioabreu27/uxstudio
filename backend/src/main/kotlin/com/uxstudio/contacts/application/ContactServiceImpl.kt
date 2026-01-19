@@ -63,4 +63,8 @@ class ContactServiceImpl(
     override fun deleteContact(id: String): Contact {
         return contactRepoPort.delete(id);
     }
+
+    override suspend fun getAllContacts(): List<Contact> {
+        return contactRepoPort.findAll()
+    }
 }

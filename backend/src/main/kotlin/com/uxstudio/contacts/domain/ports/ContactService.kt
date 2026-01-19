@@ -29,4 +29,9 @@ interface ContactService {
      * @throws IllegalArgumentException if business invariants are violated.
      */
     fun deleteContact(id: String): Contact
+
+    /**
+     * Retrieve all contacts.
+     */
+    suspend fun getAllContacts(): List<Contact>
 }

@@ -207,4 +207,19 @@ class ContactServiceImplTest {
         assertThat(result).isEqualTo(TEST_CONTACT)
         coVerify(exactly = 1) { contactRepoPort.delete(TEST_ID) }
     }
+
+    @Test
+    fun shouldReturnAllContactsSuccessfully() = runTest {
+        // Arrange
+        val contactsList = listOf(TEST_CONTACT, TEST_CONTACT.copy(id = "uuid-456", email = "jane@uxstudio.com"))
+        coEvery { contactRepoPort.findAll() } returns contactsList
+
+        // Act
+        val result = contactService.getAllContacts()
+
+        // Assert
+        assertThat(result).hasSize(2)
+        assertThat(result).containsExactlyInAnyOrderElementsOf(contactsList)
+        coVerify(exactly = 1) { contactRepoPort.findAll() }
+    }
 }

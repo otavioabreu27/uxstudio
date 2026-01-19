@@ -19,6 +19,14 @@ class ContactsController(
     private val imageService: ImageService
 ) : ContactsApi {
 
+    override suspend fun getContacts(): List<ContactResponse> {
+        return contactService.getAllContacts().map { ContactResponse.fromDomain(it) }
+    }
+
+    override suspend fun getContactById(id: String): ContactResponse {
+        return ContactResponse.fromDomain(contactService.findById(id))
+    }
+
     override suspend fun createContact(request: ContactCreationRequest): ContactResponse {
         val uploadedImageId = request.imageBase64?.let { base64 ->
             imageService.createImage(base64)

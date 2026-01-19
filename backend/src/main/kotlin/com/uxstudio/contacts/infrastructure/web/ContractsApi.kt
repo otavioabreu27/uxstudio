@@ -9,10 +9,31 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @Tag(name = "Contacts", description = "Endpoints for managing the contact list")
 interface ContactsApi {
+
+    @Operation(
+        summary = "Get all contacts",
+        description = "Retrieves a list of all contacts."
+    )
+    @ApiResponse(responseCode = "200", description = "List of contacts")
+    @GetMapping
+    suspend fun getContacts(): List<ContactResponse>
+
+    @Operation(
+        summary = "Get a contact by id",
+        description = "Retrieves a contact by its id."
+    )
+    @ApiResponses(value = [
+        ApiResponse(responseCode = "200", description = "Contact found"),
+        ApiResponse(responseCode = "404", description = "Contact not found")
+    ])
+    @GetMapping("/{id}")
+    suspend fun getContactById(@PathVariable id: String): ContactResponse
 
     @Operation(
         summary = "Create a new contact",

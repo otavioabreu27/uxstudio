@@ -2,6 +2,7 @@ package com.uxstudio.contacts.infrastructure.web
 
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.asyncDispatch
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
@@ -370,5 +371,72 @@ class ContactsControllerTest {
             .andExpect(status().isOk)
 
         coVerify(exactly = 0) { imageService.deleteImage(any()) }
+    }
+
+    @Test
+    fun shouldReturnAllContacts() = runTest {
+        // Arrange
+        val contactsList = listOf(
+            Contact(
+                id = "1",
+                name = "Alice",
+                phoneNumber = "+36 11 111 1111",
+                email = "alice@test.com",
+                imageId = "img1"
+            ),
+            Contact(
+                id = "2",
+                name = "Bob",
+                phoneNumber = "+36 22 222 2222",
+                email = "bob@test.com",
+                imageId = null
+            )
+        )
+
+        coEvery { contactService.getAllContacts() } returns contactsList
+
+        // Act
+        val mvcResult = mockMvc.perform(
+            get("/contacts")
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(request().asyncStarted()).andReturn()
+
+        // Assert
+        mockMvc.perform(asyncDispatch(mvcResult))
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.size()").value(2))
+            .andExpect(jsonPath("$[0].name").value("Alice"))
+            .andExpect(jsonPath("$[1].name").value("Bob"))
+
+        coVerify(exactly = 1) { contactService.getAllContacts() }
+    }
+
+    @Test
+    fun shouldReturnContactById() = runTest {
+        // Arrange
+        val expectedContact = Contact(
+            id = TEST_ID,
+            name = "John Doe",
+            phoneNumber = "+36 11 345 6789",
+            email = "john.doe@uxstudio.com",
+            imageId = MOCK_IMAGE_ID
+        )
+
+        coEvery { contactService.findById(TEST_ID) } returns expectedContact
+
+        // Act
+        val mvcResult = mockMvc.perform(
+            get("/contacts/{id}", TEST_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(request().asyncStarted()).andReturn()
+
+        // Assert
+        mockMvc.perform(asyncDispatch(mvcResult))
+            .andExpect(status().isOk)
+            .andExpect(jsonPath("$.id").value(TEST_ID))
+            .andExpect(jsonPath("$.name").value("John Doe"))
+            .andExpect(jsonPath("$.imageId").value(MOCK_IMAGE_ID))
+
+        coVerify(exactly = 1) { contactService.findById(TEST_ID) }
     }
 }
