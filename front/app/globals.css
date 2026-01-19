@@ -1,26 +1,93 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+    --background: #141414;
+    --foreground: #ffffff;
+
+    --grey-100: #141414;
+    --grey-90: #191919;
+    --grey-80: #1e1e1e;
+    --grey-70: #232323;
+    --grey-60: #282828;
+    --grey-50: #2d2d2d;
+    --grey-40: #323232;
+    --grey-30: #373737;
+    --grey-20: #3c3c3c;
+    --grey-10: #414141;
+
+    --white-100: #ffffff;
+    --white-56: rgba(255, 255, 255, 0.57);
+    --white-32: rgba(255, 255, 255, 0.32);
+
+    --text-primary: var(--white-100);
+    --text-secondary: var(--white-56);
+    --text-tertiary: var(--white-32);
+
+    --font-display: var(--font-glysa), sans-serif;
+    --font-body: var(--font-lexend), sans-serif;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+    --color-grey-100: var(--grey-100);
+    --color-grey-90: var(--grey-90);
+    --color-grey-80: var(--grey-80);
+    --color-grey-70: var(--grey-70);
+    --color-grey-60: var(--grey-60);
+    --color-grey-50: var(--grey-50);
+    --color-grey-40: var(--grey-40);
+
+    --color-text-primary: var(--text-primary);
+    --color-text-secondary: var(--text-secondary);
+    --color-text-tertiary: var(--text-tertiary);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+@layer utilities {
+    .text-h1 {
+        font-family: var(--font-display);
+        font-weight: 500;
+        font-size: 32px;
+        line-height: 48px;
+        letter-spacing: 0em;
+    }
+
+    .text-h2 {
+        font-family: var(--font-display);
+        font-weight: 500;
+        font-size: 24px;
+        line-height: 40px;
+        letter-spacing: 0em;
+    }
+
+    .text-h3 {
+        font-family: var(--font-body);
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 24px;
+        letter-spacing: 0.01em;
+    }
+
+    .text-body-base {
+        font-family: var(--font-body);
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 20px;
+        letter-spacing: 0.01em;
+    }
+
+    .text-message {
+        font-family: var(--font-body);
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 16px;
+        letter-spacing: 0.01em;
+    }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+    --font-display: var(--font-glysa);
+    --font-body: var(--font-lexend);
+
+    background: var(--grey-100);
+    color: var(--text-primary);
+    font-family: var(--font-body);
 }
