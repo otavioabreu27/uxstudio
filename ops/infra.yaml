@@ -1,45 +1,46 @@
-services:
-  db:
-    image: mongo:latest
-    container_name: mongodb_contacts
-    ports:
-      - "27017:27017"
-    environment:
-      MONGO_INITDB_DATABASE: contacts_db
-    volumes:
-      - mongodb_data:/data/db
+version: '3.8'
 
+services:
   minio:
     image: minio/minio:latest
-    container_name: minio_contacts
     ports:
       - "9000:9000"
       - "9001:9001"
     environment:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin
+    command: server /data --console-address ":9001"
     volumes:
       - minio_data:/data
-    command: server /data --console-address ":9001"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
       interval: 30s
       timeout: 20s
       retries: 3
 
-  createbuckets:
+
+  mc:
     image: minio/mc
     depends_on:
       minio:
         condition: service_healthy
     entrypoint: >
       /bin/sh -c "
-      /usr/bin/mc alias set myminio http://minio:9000 minioadmin minioadmin;
-      /usr/bin/mc mb myminio/uxstudio-contacts;
-      /usr/bin/mc anonymous set public myminio/uxstudio-contacts;
+      /usr/bin/mc alias set minio http://minio:9000 minioadmin minioadmin;
+      /usr/bin/mc mb minio/uxstudio-contacts;
+      /usr/bin/mc policy set public minio/uxstudio-contacts;
       exit 0;
       "
 
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: contacts_db
+
 volumes:
-  mongodb_data:
   minio_data:
+  mongo_data:
