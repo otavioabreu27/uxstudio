@@ -1,6 +1,7 @@
 # Build Stage
 FROM node:20-alpine AS builder
 WORKDIR /app
+ENV NODE_ENV=production
 COPY package.json pnpm-lock.yaml* ./
 RUN npm install -g pnpm && pnpm i --frozen-lockfile
 COPY . .

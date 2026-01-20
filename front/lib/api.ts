@@ -1,8 +1,5 @@
-const IS_SERVER = typeof window === 'undefined';
 
-const API_BASE_URL = IS_SERVER
-  ? process.env.INTERNAL_API_URL || "http://backend:8080"
-  : process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
 
 const MINIO_BASE_URL = process.env.NEXT_PUBLIC_MINIO_URL || "http://localhost:9000/uxstudio-contacts";
 
@@ -28,10 +25,27 @@ export interface ContactEditionRequest {
   editedImageBase64?: string;
 }
 
+// Helper function to handle fetch errors and extract userMessage
+async function handleFetchError(res: Response): Promise<never> {
+  let errorMessage = `HTTP error! status: ${res.status}`;
+  try {
+    const errorBody = await res.json();
+    if (errorBody && typeof errorBody === 'object' && 'userMessage' in errorBody) {
+      errorMessage = errorBody.userMessage;
+    } else {
+      errorMessage = `Backend error: ${res.status} ${res.statusText || ''}`;
+    }
+  } catch (parseError) {
+    errorMessage = `Failed to parse error response from backend. Status: ${res.status}`;
+  }
+  throw new Error(errorMessage);
+}
+
+
 export const api = {
   async getContacts(): Promise<Contact[]> {
     const res = await fetch(`${API_BASE_URL}/contacts`, { cache: 'no-store' });
-    if (!res.ok) throw new Error("Failed to fetch contacts");
+    if (!res.ok) await handleFetchError(res);
     const data = await res.json();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return data.map((c: any) => ({
@@ -49,7 +63,8 @@ export const api = {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
-    if (!res.ok) throw new Error("Failed to create contact");
+    console.log(res);
+    if (!res.ok) await handleFetchError(res);
     const c = await res.json();
     return {
       id: c.id,
@@ -66,7 +81,7 @@ export const api = {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
     });
-    if (!res.ok) throw new Error("Failed to edit contact");
+    if (!res.ok) await handleFetchError(res);
     const c = await res.json();
     return {
         id: c.id,
@@ -81,6 +96,6 @@ export const api = {
     const res = await fetch(`${API_BASE_URL}/contacts/${id}`, {
       method: "DELETE",
     });
-    if (!res.ok) throw new Error("Failed to delete contact");
+    if (!res.ok) await handleFetchError(res);
   },
 };

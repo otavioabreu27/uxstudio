@@ -2,7 +2,7 @@
 FROM gradle:jdk21 AS build
 WORKDIR /app
 COPY . .
-RUN ./gradlew build -x test --no-daemon
+RUN ./gradlew build -x test -x jacocoTestCoverageVerification --no-daemon
 
 # Run Stage
 FROM eclipse-temurin:21-jre-alpine

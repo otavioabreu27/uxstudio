@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.web.SecurityFilterChain
+import org.springframework.web.cors.CorsConfiguration
 
 @Configuration
 @EnableWebSecurity
@@ -15,21 +16,23 @@ class SecurityConfig {
         http
             .cors { cors ->
                 cors.configurationSource {
-                    val config = org.springframework.web.cors.CorsConfiguration()
-                    val allowedOrigin = System.getenv("ALLOWED_ORIGINS") ?: "http://localhost:3000"
-                    config.allowedOrigins = listOf(allowedOrigin)
-                    config.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                    val config = CorsConfiguration()
+                    config.allowedOrigins = listOf("*")
+                    config.allowedMethods = listOf("*")
                     config.allowedHeaders = listOf("*")
                     config
                 }
             }
             .csrf { it.disable() }
+
             .headers { headers ->
                 headers.frameOptions { it.disable() }
             }
+
             .authorizeHttpRequests { auth ->
                 auth.anyRequest().permitAll()
             }
+
             .formLogin { it.disable() }
             .httpBasic { it.disable() }
 
