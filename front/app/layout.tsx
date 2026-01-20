@@ -9,19 +9,14 @@ const glysa = localFont({
       weight: "500",
     },
   ],
-  variable: "--font-glysa"
+  variable: "--font-glysa",
 });
-
-console.log(glysa.className)
 
 const lexend = Lexend_Deca({
   subsets: ["latin"],
   weight: ["400"],
   variable: "--font-lexend",
 });
-
-
-console.log(lexend.className)
 
 export default function RootLayout({
   children,

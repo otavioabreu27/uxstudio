@@ -51,7 +51,6 @@ export default function ContactListItem({
             fill
             sizes="40px"
             className="object-cover"
-            unoptimized={true}
           />
         </div>
 

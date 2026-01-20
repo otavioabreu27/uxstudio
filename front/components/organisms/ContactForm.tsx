@@ -80,7 +80,6 @@ export default function ContactForm({
               alt="Profile"
               fill
               className="object-cover"
-              unoptimized={true}
             />
           ) : (
             <Icon icon={User} className="w-8 h-8 text-text-primary" />

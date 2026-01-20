@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Header from "@/components/organisms/Header";
 import ContactListItem from "@/components/molecules/ContactListItem";
 import ContactForm, {
@@ -9,11 +8,22 @@ import ContactForm, {
 } from "@/components/organisms/ContactForm";
 import { Button } from "../molecules/Button";
 import { ArrowLeft, Sun } from "lucide-react";
-import { api, Contact } from "@/lib/api";
+import { Contact } from "@/lib/api";
+import {
+  createContactAction,
+  deleteContactAction,
+  updateContactAction,
+} from "@/app/actions";
+import Toast from "../molecules/Toast";
 
 interface ContactsTemplateProps {
   initialContacts: Contact[];
 }
+
+type Notification = {
+  message: string;
+  type: "success" | "error";
+};
 
 export default function ContactsTemplate({
   initialContacts,
@@ -21,49 +31,76 @@ export default function ContactsTemplate({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingContact, setEditingContact] = useState<Contact | null>(null);
-  const [contacts, setContacts] = useState<Contact[]>(initialContacts);
+  const [notification, setNotification] = useState<Notification | null>(null);
+
+  const contacts = initialContacts;
 
   const handleEdit = (contact: Contact) => {
     setEditingContact(contact);
     setIsEditModalOpen(true);
   };
 
+  const showNotification = (notification: Notification) => {
+    setNotification(notification);
+  };
 
   const handleCreateContact = async (data: ContactFormData) => {
-    try {
-      const newContact = await api.createContact({
-        name: data.name,
-        phoneNumber: data.phoneNumber,
-        email: data.email,
-        imageBase64: data.picture?.startsWith("data:") ? data.picture : undefined,
-      });
-      setContacts([newContact, ...contacts]);
+    const result = await createContactAction({
+      name: data.name,
+      phoneNumber: data.phoneNumber,
+      email: data.email,
+      picture: data.picture?.startsWith("data:") ? data.picture : undefined,
+    });
+
+    showNotification({
+      message: result.message,
+      type: result.success ? "success" : "error",
+    });
+
+    if (result.success) {
       setIsModalOpen(false);
-    } catch (error) {
-      console.error("Failed to create contact", error);
     }
   };
 
   const handleUpdateContact = async (data: ContactFormData) => {
     if (!editingContact) return;
-    try {
-      const updatedContact = await api.editContact(editingContact.id, {
-        editedName: data.name,
-        editedPhoneNumber: data.phoneNumber,
-        editedEmail: data.email,
-        editedImageBase64: data.picture?.startsWith("data:") ? data.picture : undefined,
-      });
-      setContacts(
-        contacts.map((c) => (c.id === updatedContact.id ? updatedContact : c))
-      );
+    const result = await updateContactAction(editingContact.id, {
+      editedName: data.name,
+      editedPhoneNumber: data.phoneNumber,
+      editedEmail: data.email,
+      editedImageBase64: data.picture?.startsWith("data:")
+        ? data.picture
+        : undefined,
+    });
+
+    showNotification({
+      message: result.message,
+      type: result.success ? "success" : "error",
+    });
+
+    if (result.success) {
       setIsEditModalOpen(false);
-    } catch (error) {
-      console.error("Failed to update contact", error);
     }
+  };
+
+  const handleRemoveContact = async (id: string) => {
+    const result = await deleteContactAction(id);
+    showNotification({
+      message: result.message,
+      type: result.success ? "success" : "error",
+    });
   };
 
   return (
     <div className="w-full h-screen bg-grey-100 text-text-primary grid grid-cols-[30%_1fr_30%] overflow-hidden">
+      {notification && (
+        <Toast
+          message={notification.message}
+          type={notification.type}
+          onClose={() => setNotification(null)}
+        />
+      )}
+
       <aside className="flex flex-col items-center h-full border-r border-transparent">
         <div className="h-30 w-full flex items-center justify-end">
           <Button variant="secondary" icon={ArrowLeft} />
@@ -84,14 +121,7 @@ export default function ContactsTemplate({
               onMute={() => console.log("Mute", contact.id)}
               onCall={() => console.log("Call", contact.id)}
               onEdit={() => handleEdit(contact)}
-              onRemove={async () => {
-                try {
-                  await api.deleteContact(contact.id);
-                  setContacts(contacts.filter((c) => c.id !== contact.id));
-                } catch (error) {
-                  console.error("Failed to delete contact", error);
-                }
-              }}
+              onRemove={() => handleRemoveContact(contact.id)}
             />
           ))}
         </div>
